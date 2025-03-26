@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import type { Note } from '../types/Note';
+import NoteItem from '../components/NoteItem.astro';
+import NoteForm from '../components/NoteForm.astro';
+
+const response = await fetch('http://localhost:5274/api/notes');
+const notes: Note[] = await response.json();
+---
+
+<Layout title="Personal Knowledge Base">
+    <h1>My Notes</h1>
+    <NoteForm />
+    <ul>
+        {notes.map((note: Note) => (
+            <NoteItem note={note} />
+        ))}
+    </ul>
+</Layout>

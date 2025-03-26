@@ -1,0 +1,59 @@
+---
+import type { Note } from '../types/Note';
+import NoteEditForm from './NoteEditForm.astro';
+
+interface Props {
+    note: Note;
+}
+
+const { note } = Astro.props;
+
+function handleEditClick(noteId: number) {
+    const displayDiv = document.getElementById(`note-display-${noteId}`);
+    const editFormDiv = document.getElementById(`note-edit-form-${noteId}`);
+    if (displayDiv && editFormDiv) {
+        displayDiv.style.display = 'none';
+        editFormDiv.style.display = 'block';
+    }
+}
+---
+
+<li>
+    <div id={`note-display-${note.id}`}>
+        <h2>{note.title}</h2>
+        <p>{note.content}</p>
+        <button class="edit-button" onclick={() => handleEditClick(note.id)}>Edit</button>
+        <button class="delete-button">Delete</button>
+    </div>
+    <div id={`note-edit-form-${note.id}`} style="display:none;">
+        <NoteEditForm note={note} />
+    </div>
+</li>
+
+<script>
+    import NoteEditForm from './NoteEditForm.astro';
+
+    const noteItem = Astro.props.note;
+    const deleteButton = document.querySelector('.delete-button');
+    const editButton = document.querySelector('.edit-button');
+
+
+    deleteButton?.addEventListener('click', async () => {
+        try {
+            const response = await fetch(`http://localhost:5274/api/notes/${noteItem.id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                console.log('Note deleted successfully');
+                window.location.reload();
+            } else {
+                console.error('Failed to delete note', response.status);
+            }
+        } catch (error) {
+            console.error('Error deleting note:', error);
+        }
+    });
+
+    // Edit button click is handled in the template using onclick and handleEditClick function
+</script>

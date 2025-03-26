@@ -1,0 +1,6 @@
+@PersonalKnowledgeBase.Backend_HostAddress = http://localhost:5274
+
+GET {{PersonalKnowledgeBase.Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
